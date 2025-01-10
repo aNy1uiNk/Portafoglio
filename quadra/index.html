@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quadratic Equation Generator</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            text-align: center;
+            width: 80%;
+            max-width: 800px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .equation {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #777;
+        }
+
+        .equation-output {
+            font-size: 20px;
+            color: #333;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Quadratic Equation Generator</h1>
+        <p>It randomly generates quadratic equations with integer solutions, perfect for factoring practice.</p>
+        
+        <div class="equation">
+            <p id="equation-output">ax²+bx+c=0</p>
+        </div>
+        
+        <button onclick="generateEquation()">Generate</button>
+        
+        <div class="footer">
+            <p>Made by Andrew Wang Udebuluzor Inyene Nubia Kim</p>
+        </div>
+    </div>
+    <script>
+        function generateEquation() {
+            let prova;
+            let provb;
+            let provc;
+            let SQE;
+            do{
+                do{
+                    prova=Math.floor(Math.random() * 19) - 9; // -9〜9
+                }while(prova==0);
+                provb=Math.floor(Math.random() * 19) - 9; // -9〜9
+                provc=Math.floor(Math.random() * 19) - 9; // -9〜9
+            }while((provb==0&&provc==0)||!DoQF(prova,provb,provc));
+            const a = prova;
+            const b = provb;
+            const c = provc;
+
+            let texta="";
+            let textb="";
+            let textc="";
+            if(a!=1)texta=a;
+            if(a==-1)texta="-";
+            if(b!=0&&b!=1)textb=b;
+            if(b==-1)textb="-";
+            if(b!=0)textb+="x";
+            if(b>0)textb=`+${textb}`;
+            if(c!=0)textc=c;
+            if(c>0)textc=`+${textc}`
+            const equation = `${texta}x²${textb}${textc}=0`
+
+            document.getElementById('equation-output').textContent = equation;
+            document.getElementById('debug').textContent = `a=${a},b=${b},c=${c}, x=${(Math.sqrt(b*b-4*a*c)-b)/a/2},${(Math.sqrt(b*b-4*a*c)*-1-b)/a/2} ${Number.isInteger(Math.sqrt(b*b-4*a*c)-b/a/2)}`;
+        }
+        function SolveQE(a, b, c){
+            const d=Math.sqrt(b*b-4*a*c);
+            return [(d-b)/a/2,-(d+b)/a/2];
+        }
+        function DoQF(a, b, c) {
+            const d=SolveQE(a,b,c);
+            if(Number.isInteger(d[0])&&Number.isInteger(d[1])){
+                return true;
+            }else{
+                return false;
+            }
+        }
+    </script>
+
+</body>
+</html>
