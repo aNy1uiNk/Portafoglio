@@ -9,15 +9,17 @@ function setup() {
   createCanvas(800, 800);
   colorMode(HSB, 360, 255, 255, 255);
   glowLayer = createGraphics(width, height);
+  glowLayer.colorMode(HSB, 360, 255, 255, 255);
+  glowLayer.blendMode(ADD);
   noStroke();
-  blendMode(ADD);
 }
 
 function draw() {
   background(0, 0, 0, 12);
 
   glowLayer.clear();
-  glowLayer.colorMode(HSB, 360, 255, 255, 255);
+  glowLayer.noStroke();
+  glowLayer.push();
   glowLayer.translate(width / 2, height / 2);
   glowLayer.rotate(sin(frameCount * 0.002 + mouseX * 0.0005) * 0.3);
 
@@ -35,18 +37,22 @@ function draw() {
       let sy = y * 18 + sin(angle) * radius;
 
       let depth = sin(t * 1.2 + x * 0.3 + y * 0.3);
-      let size = map(depth, -1, 1, 3, 10);
+      let sz = map(depth, -1, 1, 3, 10);
       let hue = (angle * 60 + frameCount * 0.5 + mouseY * 0.3) % 360;
       let alpha = map(radius, 10, 90, 60, 200);
 
       glowLayer.fill(hue, 200, 255, alpha);
-      glowLayer.ellipse(sx, sy, size, size);
+      glowLayer.ellipse(sx, sy, sz, sz);
     }
   }
+  glowLayer.pop();
 
+  glowLayer.push();
+  glowLayer.translate(width / 2, height / 2);
   drawRadiantShell(glowLayer);
   drawPulseRing(glowLayer);
   drawNebulaDust(glowLayer);
+  glowLayer.pop();
 
   image(glowLayer, 0, 0);
 
@@ -90,12 +96,13 @@ function drawPulseRing(pg) {
 
 function drawStarField() {
   push();
+  translate(width / 2, height / 2); // Center for star field drawing
   noStroke();
   for (let i = 0; i < 70; i++) {
     let angle = random(TWO_PI);
     let r = random(300, 450);
-    let x = width / 2 + cos(angle) * r;
-    let y = height / 2 + sin(angle) * r;
+    let x = cos(angle) * r;
+    let y = sin(angle) * r;
     fill(0, 0, 255, random(8, 24));
     ellipse(x, y, random(1, 2.5), random(1, 2.5));
   }
